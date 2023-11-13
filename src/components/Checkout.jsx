@@ -10,12 +10,12 @@ const Checkout = () => {
     detail: '',
     province: '',
     city: '',
-    postalCode: '',
-    paymentMethod: 'credit',
-    ccName: '',
-    ccNumber: '',
-    ccExpiration: '',
-    ccCvv: '',
+    postal_code: '',
+    // paymentMethod: 'credit',
+    // ccName: '',
+    // ccNumber: '',
+    // ccExpiration: '',
+    // ccCvv: '',
   });
 
   let total = 0;
@@ -40,6 +40,7 @@ const Checkout = () => {
       const response = await fetch('http://localhost:3300/address', {
         method: 'POST',
         headers: {
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
@@ -96,12 +97,14 @@ const Checkout = () => {
             <h4 className="mb-3">Billing address</h4>
             <form className="needs-validation" noValidate="" onSubmit={handleSubmit}>
               <div className="row g-3">
-                <div className="col-sm-12">
+                <div className="col-12">
                   <label htmlFor="name" className="form-label">
                     Name
                   </label>
-                  <input type="text" className="form-control" id="name" placeholder="" value="" required="" />
-                  <div className="invalid-feedback">Valid first name is required.</div>
+                  <div className="input-group has-validation">
+                    <input type="text" className="form-control" id="name" placeholder="Username" required="" />
+                    <div className="invalid-feedback">Your Name is required.</div>
+                  </div>
                 </div>
                 <div className="col-12">
                   <label htmlFor="username" className="form-label">
@@ -138,25 +141,19 @@ const Checkout = () => {
                   <label htmlFor="province" className="form-label">
                     Province
                   </label>
-                  <select className="form-select" id="province" required="">
-                    <option value="">Choose...</option>
-                    <option>United States</option>
-                  </select>
-                  <div className="invalid-feedback">Please select a valid province.</div>
+                  <input type="text" className="form-control" id="province" placeholder="" required="" />
+                  <div className="invalid-feedback">Province required.</div>
                 </div>
                 <div className="col-md-4">
                   <label htmlFor="city" className="form-label">
                     City
                   </label>
-                  <select className="form-select" id="city" required="">
-                    <option value="">Choose...</option>
-                    <option>California</option>
-                  </select>
-                  <div className="invalid-feedback">Please provide a valid city.</div>
+                  <input type="text" className="form-control" id="city" placeholder="" required="" />
+                  <div className="invalid-feedback">City required.</div>
                 </div>
 
                 <div className="col-md-3">
-                  <label htmlFor="postal-code" className="form-label">
+                  <label htmlFor="postal_code" className="form-label">
                     Postal Code
                   </label>
                   <input type="text" className="form-control" id="postal-code" placeholder="" required="" />

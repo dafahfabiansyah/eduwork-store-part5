@@ -25,13 +25,13 @@ const Header = () => {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="/about">
-                  About
+                <NavLink className="nav-link" to="/track">
+                  Track
                 </NavLink>
               </li>
               <li className="nav-item">
-                <NavLink className="nav-link" to="/contact">
-                  Contact
+                <NavLink className="nav-link" to="/invoice">
+                  Invoice
                 </NavLink>
               </li>
             </ul>

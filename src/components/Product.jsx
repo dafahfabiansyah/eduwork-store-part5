@@ -35,9 +35,9 @@ const Product = () => {
 
     return (
       <div className="card my-5 py-4" key={item.id} style={{ width: '18rem' }}>
-        <img src={`http://localhost:3300/image/${item.image}`} className="card-img-top" alt={item.title} />
+        <img src={`http://localhost:3300/image/${item.image}`} className="card-img-top" alt={item.name} />
         <div className="card-body text-center">
-          <h5 className="card-title">{item.title}</h5>
+          <h5 className="card-title">{item.name}</h5>
           <p className="lead">Rp.{item.price}</p>
           <p className="lead">{item.description}</p>
           <button onClick={() => handleCart(item, cartBtn, setCartBtn)} className="btn btn-outline-primary my-5">
