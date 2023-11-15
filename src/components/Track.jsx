@@ -1,7 +1,6 @@
-// Track.js
 import React, { useState } from 'react';
 
-const Track = () => {
+const Track = ({ productData }) => {
   const [paymentStatus] = useState('pending'); // 'pending' or 'completed'
   const [packageStatus] = useState('packing'); // 'packing' or 'shipped'
 
@@ -16,6 +15,18 @@ const Track = () => {
           <div>
             <strong>Package Status:</strong> {packageStatus === 'shipped' ? 'Shipped' : 'Packing'}
           </div>
+          {productData && (
+            <div>
+              <h5>Product Details:</h5>
+              <ul>
+                {productData.map((product, index) => (
+                  <li key={index}>
+                    <strong>Product:</strong> {product.name}, <strong>Quantity:</strong> {product.quantity}, <strong>Price:</strong> ${product.price}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       </div>
     </div>

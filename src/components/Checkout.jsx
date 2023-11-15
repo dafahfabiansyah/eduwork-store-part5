@@ -1,22 +1,24 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
 
 const Checkout = () => {
   const state = useSelector((state) => state.addItem);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    address: '',
-    detail: '',
-    province: '',
-    city: '',
-    postal_code: '',
-    // paymentMethod: 'credit',
-    // ccName: '',
-    // ccNumber: '',
-    // ccExpiration: '',
-    // ccCvv: '',
-  });
+  const [data, setData] = useState({});
+  const [name, setName] = useState('');
+  const [address, setAddress] = useState('');
+  const [province, setProvince] = useState('');
+  const [city, setCity] = useState('');
+  const [postal_code, setPostalCode] = useState('');
+  const [detail, setDetail] = useState('');
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   address: '',
+  //   province: '',
+  //   city: '',
+  //   postal_code: '',
+  //   detail: '',
+  // });
 
   let total = 0;
   const itemList = (item) => {
@@ -32,25 +34,27 @@ const Checkout = () => {
   };
 
   const handleSubmit = async (e) => {
+    const data = {
+      name,
+      address,
+      province,
+      city,
+      postal_code,
+      detail,
+    };
     e.preventDefault();
 
-    // Perform data validation if needed
-
     try {
-      const response = await fetch('http://localhost:3300/address', {
-        method: 'POST',
+      const response = await axios.post('http://localhost:3300/address', data, {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
       });
 
-      if (response.ok) {
-        // Handle success, e.g., show a success message
+      if (response.status === 200) {
         console.log('Data sent successfully');
       } else {
-        // Handle error, e.g., show an error message
         console.error('Failed to send data');
       }
     } catch (error) {
@@ -60,7 +64,7 @@ const Checkout = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevFormData) => ({
+    setData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
@@ -83,15 +87,6 @@ const Checkout = () => {
                 <strong>Rp{total}</strong>
               </li>
             </ul>
-
-            {/* <form className="card p-2">
-              <div className="input-group">
-                <input type="text" className="form-control" placeholder="Promo code" />
-                <button type="submit" className="btn btn-secondary">
-                  Redeem
-                </button>
-              </div>
-            </form> */}
           </div>
           <div className="col-md-7 col-lg-8">
             <h4 className="mb-3">Billing address</h4>
@@ -102,7 +97,7 @@ const Checkout = () => {
                     Name
                   </label>
                   <div className="input-group has-validation">
-                    <input type="text" className="form-control" id="name" placeholder="Username" required="" />
+                    <input type="text" className="form-control" id="name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Username" required="" name="name" />
                     <div className="invalid-feedback">Your Name is required.</div>
                   </div>
                 </div>
@@ -112,7 +107,7 @@ const Checkout = () => {
                   </label>
                   <div className="input-group has-validation">
                     <span className="input-group-text">@</span>
-                    <input type="text" className="form-control" id="username" placeholder="Username" required="" />
+                    <input type="text" className="form-control" id="username" placeholder="Username" required="" name="username" />
                     <div className="invalid-feedback">Your username is required.</div>
                   </div>
                 </div>
@@ -120,43 +115,42 @@ const Checkout = () => {
                   <label htmlFor="email" className="form-label">
                     Email <span className="text-muted">(Optional)</span>
                   </label>
-                  <input type="email" className="form-control" id="email" placeholder="you@example.com" />
-                  <div className="invalid-feedback">Please enter a valid email address htmlFor shipping updates.</div>
+                  <input type="email" className="form-control" id="email" placeholder="you@example.com" name="email" />
+                  <div className="invalid-feedback">Please enter a valid email address for shipping updates.</div>
                 </div>
                 <div className="col-12">
                   <label htmlFor="address" className="form-label">
                     Address
                   </label>
-                  <input type="text" className="form-control" id="address" placeholder="1234 Main St" required="" />
+                  <input type="text" className="form-control" id="address" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="1234 Main St" required="" name="address" />
                   <div className="invalid-feedback">Please enter your shipping address.</div>
                 </div>
                 <div className="col-12">
                   <label htmlFor="detail" className="form-label">
                     Detail
                   </label>
-                  <input type="text" className="form-control" id="detail" placeholder="1234 Main St" required="" />
+                  <input type="text" className="form-control" id="detail" value={detail} onChange={(e) => setDetail(e.target.value)} placeholder="1234 Main St" required="" name="detail" />
                   <div className="invalid-feedback">Too Short</div>
                 </div>
                 <div className="col-md-5">
                   <label htmlFor="province" className="form-label">
                     Province
                   </label>
-                  <input type="text" className="form-control" id="province" placeholder="" required="" />
+                  <input type="text" className="form-control" id="province" value={province} onChange={(e) => setProvince(e.target.value)} placeholder="" required="" name="province" />
                   <div className="invalid-feedback">Province required.</div>
                 </div>
                 <div className="col-md-4">
                   <label htmlFor="city" className="form-label">
                     City
                   </label>
-                  <input type="text" className="form-control" id="city" placeholder="" required="" />
+                  <input type="text" className="form-control" value={city} onChange={(e) => setCity(e.target.value)} id="city" placeholder="" required="" name="city" />
                   <div className="invalid-feedback">City required.</div>
                 </div>
-
                 <div className="col-md-3">
                   <label htmlFor="postal_code" className="form-label">
                     Postal Code
                   </label>
-                  <input type="text" className="form-control" id="postal-code" placeholder="" required="" />
+                  <input type="text" className="form-control" id="postal-code" value={postal_code} onChange={(e) => setPostalCode(e.target.value)} placeholder="" required="" name="postal_code" />
                   <div className="invalid-feedback">Postal Code required.</div>
                 </div>
               </div>
@@ -220,7 +214,7 @@ const Checkout = () => {
               </div>
 
               <hr className="my-4" />
-              <button className="w-100 btn btn-primary btn-lg" type="submit" onClick={handleChange}>
+              <button className="w-100 btn btn-primary btn-lg" type="submit" onClick={handleSubmit}>
                 Continue to checkout
               </button>
             </form>

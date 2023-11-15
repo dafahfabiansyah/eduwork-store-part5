@@ -40,6 +40,7 @@ const Product = () => {
           <h5 className="card-title">{item.name}</h5>
           <p className="lead">Rp.{item.price}</p>
           <p className="lead">{item.description}</p>
+          <p className="lead">{item.category}</p>
           <button onClick={() => handleCart(item, cartBtn, setCartBtn)} className="btn btn-outline-primary my-5">
             {cartBtn}
           </button>

@@ -1,61 +1,90 @@
-// Invoice.js
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import GetAddress from '../api/GetAddress';
 
-const Invoice = ({ formData, total, itemList }) => {
-  return (
-    <div className="container my-5">
-      <div className="row g-5">
-        <div className="col-md-5 col-lg-4 order-md-last">
-          <h4 className="d-flex justify-content-between align-items-center mb-3">
-            <span className="text-primary">Your Invoice</span>
-          </h4>
-          <ul className="list-group mb-3">
-            {itemList}
+const Invoice = () => {
+  const [addressData, setAddressData] = useState([]);
+  const state = useSelector((state) => state.addItem);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const fetchDataFromApi = async () => {
+      try {
+        const newAddressData = await GetAddress();
+        setAddressData(newAddressData);
+      } catch (error) {
+        console.error('Error fetching data from API: ', error);
+      }
+    };
 
-            <li className="list-group-item d-flex justify-content-between">
-              <span>Total </span>
-              <strong>Rp{total}</strong>
-            </li>
-          </ul>
-        </div>
-        <div className="col-md-7 col-lg-8">
-          <h4 className="mb-3">Billing address</h4>
-          {formData ? (
-            <address>
-              <strong>Name: {formData.name}</strong>
-              <br />
-              Username: {formData.username}
-              <br />
-              Email: {formData.email || 'N/A'}
-              <br />
-              Address: {formData.address}
-              <br />
-              Detail: {formData.detail}
-              <br />
-              Province: {formData.province}
-              <br />
-              City: {formData.city}
-              <br />
-              Postal Code: {formData.postalCode}
-            </address>
-          ) : (
-            <p>No billing address information available.</p>
-          )}
+    fetchDataFromApi();
+  }, []);
 
-          <h4 className="mb-3">Payment</h4>
-          {formData ? <p>Payment Method: {formData.paymentMethod}</p> : <p>No payment information available.</p>}
+  const calculateTotal = () => {
+    return state.reduce((total, cartItem) => total + cartItem.price, 0);
+  };
 
-          {formData?.paymentMethod === 'credit' && (
-            <div>
-              <p>Name on card: {formData.ccName}</p>
-              <p>Credit card number: {formData.ccNumber}</p>
-              <p>Expiration: {formData.ccExpiration}</p>
-              <p>CVV: {formData.ccCvv}</p>
+  const invItems = (cartItem) => {
+    return (
+      <div className="px-4 my-5 bg-light rounded-3" key={cartItem.id}>
+        <div className="container py-4">
+          <div className="row justify-content-center">
+            <div className="col-md-4">
+              <img src={`http://localhost:3300/image/${cartItem.image}`} alt={cartItem.title} height="200px" width="180px" />
             </div>
-          )}
+            <ul className="col-md-4">
+              <div>{cartItem.name}</div>
+              <div className="lead fw-bold">Rp{cartItem.price}</div>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    );
+  };
+
+  const totalSection = () => {
+    return (
+      <div className="px-4 my-5 bg-light rounded-3">
+        <div className="container py-4">
+          <div className="row">
+            <div className="col-md-6">
+              <h4>Address</h4>
+              <div className="address-box">
+                {addressData.map((addressItem) => (
+                  <div key={addressItem.id}>
+                    {addressItem.address}, {addressItem.name}
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="col-md-6">
+              <h4>Total</h4>
+              <h2 className="lead fw-bold">Rp{calculateTotal()}</h2>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const emptyCart = () => {
+    return (
+      <div className="px-4 my-5 bg-light rounded-3 py-5">
+        <div className="container py-4">
+          <div className="row">
+            <h3>Your Invoice is Empty</h3>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      {state.length === 0 && emptyCart()}
+      {state.length !== 0 && totalSection()}
+      {state.length !== 0 && state.map(invItems)}
+    </>
   );
 };
 

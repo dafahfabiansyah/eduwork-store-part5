@@ -1,8 +1,10 @@
-import addItem from "./addItem";
-import { combineReducers } from "redux";
+import addItem from './addItem';
+import addInvoices from './addInvoice';
+import { combineReducers } from 'redux';
 
 const rootReducers = combineReducers({
-    addItem
-})
+  addItem,
+  addInvoices,
+});
 
 export default rootReducers;
